@@ -3,9 +3,9 @@ use tauri::{AppHandle, Manager};
 
 const GROUP_PANIC: &str = "fatal error occurred in group handler";
 
-type JsonStr = String;
+pub type JsonStr = String;
 
-fn app_dir(app: AppHandle) -> String {
+pub fn app_dir(app: AppHandle) -> String {
     app.path()
         .app_data_dir()
         .expect(GROUP_PANIC)
