@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { groups, setGroups } from "../notes/GroupPanel";
 
-export const groupRegex = /^(?!^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\..*)?$)[^<>:"/\\|?*\r\n]+[^<>:"/\\|?*.\r\n]$/;
+export const regex = /^(?!^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\..*)?$)[^<>:"/\\|?*\r\n]+[^<>:"/\\|?*.\r\n]$/;
 
 export async function fetchGroups() {
     let groups;
@@ -30,12 +30,13 @@ export async function hasGroup(groupName) {
 }
 
 export async function createGroup(groupName) {
-    if (groupRegex.test(groupName)) {
+    if (regex.test(groupName)) {
         await invoke("create_group", {
             groupName: groupName
         })
         .then(ok => {
-            setGroups([...groups, groupName])
+            setGroups([...groups, groupName]);
+            console.log(groups);
         })
         .catch(err => {
             console.error(err);

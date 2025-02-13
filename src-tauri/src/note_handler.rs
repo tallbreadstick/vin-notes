@@ -1,6 +1,6 @@
 use crate::group_handler::{app_dir, JsonStr};
-use std::fs;
 use std::path::Path;
+use std::{fs, fs::File};
 use tauri::AppHandle;
 
 #[tauri::command]
@@ -30,13 +30,14 @@ pub fn has_note(app: AppHandle, group_name: &str, note_name: &str) -> bool {
 
 #[tauri::command]
 pub fn create_note(app: AppHandle, group_name: &str, note_name: &str) -> Result<(), String> {
-    Ok(
-        fs::create_dir_all(&format!("{}\\{}\\{}", app_dir(app), group_name, note_name))
-            .map_err(|e| e.to_string())?,
-    )
+    File::create_new(&format!("{}\\{}\\{}", app_dir(app), group_name, note_name))
+        .map_err(|e| e.to_string())?;
+    Ok(())
 }
 
 #[tauri::command]
 pub fn delete_note(app: AppHandle, group_name: &str, note_name: &str) -> Result<(), String> {
-    Ok(fs::remove_dir_all(&format!("{}\\{}\\{}", app_dir(app), group_name, note_name)).map_err(|e| e.to_string())?)
+    fs::remove_file(&format!("{}\\{}\\{}", app_dir(app), group_name, note_name))
+        .map_err(|e| e.to_string())?;
+    Ok(())
 }

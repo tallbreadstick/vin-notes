@@ -1,4 +1,4 @@
-import GroupPanel, { openGroupPrompt } from "./notes/GroupPanel";
+import GroupPanel, { currentGroup, openGroupPrompt, openNotePrompt, setGroup, tryDeleteGroup, tryDeleteNote } from "./notes/GroupPanel";
 import WindowToolbar from "./WindowToolbar";
 import "./dashboard.css";
 import "./menus.css";
@@ -16,6 +16,31 @@ function App() {
                 }
                 break;
             case 'n':
+                if (e.ctrlKey && currentGroup() !== "") {
+                    openNotePrompt();
+                    e.preventDefaults();
+                }
+                break;
+            case 'delete':
+                const focused = document.activeElement;
+                if (focused.classList.contains("group")) {
+                    tryDeleteGroup(focused.querySelector("label").textContent);
+                }
+                if (focused.classList.contains("note")) {
+                    tryDeleteNote(focused.querySelector("label").textContent);
+                }
+                break;
+            case 'enter':
+                if (currentGroup() === "") {
+                    document.querySelector(".group").focus();
+                } else {
+                    document.querySelector(".note").focus();
+                }
+                break;
+            case 'backspace':
+                if (e.ctrlKey) {
+                    setGroup("");
+                }
                 break;
         }
     }

@@ -3,11 +3,12 @@ import BackButton from "./../assets/prev-page.svg";
 import { createStore } from "solid-js/store";
 import { createSignal, Match, onMount, Switch } from "solid-js";
 import { render } from "solid-js/web";
-import { createGroup, deleteGroup, fetchGroups, groupRegex, hasGroup } from "./../scripts/groups";
+import { createGroup, deleteGroup, fetchGroups, regex, hasGroup } from "./../scripts/groups";
 import Prompt from "../menus/Prompt";
 import { spawnContext } from "../menus/ContextMenu";
 import Confirm from "../menus/Confirm";
 import Selection from "../menus/Selection";
+import { createNote, deleteNote, fetchNotes } from "../scripts/notes";
 
 export const [groups, setGroups] = createStore([]);
 export const [notes, setNotes] = createStore([]);
@@ -16,7 +17,7 @@ export const [prompting, setPrompting] = createSignal(false);
 export const [currentGroup, setGroup] = createSignal("");
 
 async function validateName(e) {
-    if (groupRegex.test(e.target.value) && !(await hasGroup(e.target.value))) {
+    if (regex.test(e.target.value) && !(await hasGroup(e.target.value))) {
         e.target.classList.remove("invalid");
     } else {
         e.target.classList.add("invalid");
@@ -48,7 +49,7 @@ export function openNotePrompt() {
                 placeholder="Enter a name..."
                 button="Create"
                 options={["Note", "Todo"]}
-                onClick
+                onClick={createNote}
                 onClose={closePrompt} />
         ), document.getElementById("dashboard"));
     }
@@ -58,21 +59,35 @@ function closePrompt() {
     setPrompting(false);
 }
 
-function tryDelete(group) {
+export function tryDeleteGroup(group) {
     if (!prompting()) {
         setPrompting(true);
         render(() => (
             <Confirm
-                title={`Delete "${group}"?`}
+                title={`Delete Group "${group}"?`}
                 onClose={closePrompt}
                 onConfirm={() => deleteGroup(group)} />
         ), document.getElementById("dashboard"));
     }
 }
 
-function openGroup(e) {
+export function tryDeleteNote(note) {
+    if (!prompting()) {
+        setPrompting(true);
+        render(() => (
+            <Confirm
+                title={`Delete Note "${note}"?`}
+                onClose={closePrompt}
+                onConfirm={() => deleteNote(note)} />
+        ), document.getElementById("dashboard"));
+    }
+}
+
+async function openGroup(e) {
     const label = e.target.querySelector("label");
     setGroup(label.textContent);
+    setNotes([]);
+    setNotes(await fetchNotes());
 }
 
 function exitGroup() {
@@ -86,9 +101,70 @@ function GroupPanel() {
         spawnContext(e, (
             <>
                 <label>Rename Group</label>
-                <label onClick={() => tryDelete(label.textContent)}>Delete Group</label>
+                <label onClick={() => tryDeleteGroup(label.textContent)}>Delete Group</label>
             </>
         ));
+    }
+
+    function openNoteContext(e) {
+        const label = e.target.querySelector("label");
+        spawnContext(e, (
+            <>
+                <label>Rename Note</label>
+                <label onClick={() => tryDeleteNote(label.textContent)}>Delete Note</label>
+            </>
+        ));
+    }
+
+    function focus(e) {
+        e.target.focus();
+        console.log(document.activeElement);
+    }
+
+    function handleGroupFocusKeys(e) {
+        const groupElems = [...document.querySelectorAll(".group")];
+        const index = parseInt(e.target.dataset.index);
+        switch (e.key) {
+            case 'ArrowUp':
+                if (index - 1 >= 0) {
+                    groupElems[index - 1].focus();
+                }
+                break;
+            case 'ArrowDown':
+                if (index + 1 < groupElems.length) {
+                    groupElems[index + 1].focus();
+                }
+                break;
+            case 'Escape':
+                document.activeElement.blur();
+                break;
+            case 'Enter':
+                openGroup(e);
+                break;
+        }
+    }
+
+    function handleNoteFocusKeys(e) {
+        const noteElems = [...document.querySelectorAll(".note")];
+        const index = parseInt(e.target.dataset.index);
+        switch (e.key) {
+            case 'ArrowUp':
+                if (index - 1 >= 0) {
+                    noteElems[index - 1].focus();
+                }
+                break;
+            case 'ArrowDown':
+                if (index + 1 < noteElems.length) {
+                    noteElems[index + 1].focus();
+                }
+                break;
+            case 'Escape':
+                document.activeElement.blur();
+                break;
+            case 'Enter':
+                // todo!
+                break;
+        }
     }
 
     onMount(async () => {
@@ -108,7 +184,14 @@ function GroupPanel() {
                     <div class="groups-body">
                         <For each={groups}>
                             {(item, index) => (
-                                <div onClick={openGroup} class="group" onContextMenu={openGroupContext}>
+                                <div
+                                    class="group"
+                                    tabIndex="-1"
+                                    data-index={index()}
+                                    onClick={focus}
+                                    onDblClick={openGroup}
+                                    onKeyDown={handleGroupFocusKeys}
+                                    onContextMenu={openGroupContext}>
                                     <label>{item}</label>
                                 </div>
                             )}
@@ -128,7 +211,14 @@ function GroupPanel() {
                     <div class="notes-body">
                         <For each={notes}>
                             {(item, index) => (
-                                <div class="note">
+                                <div
+                                    class="note"
+                                    tabIndex="-1"
+                                    data-index={index()}
+                                    onClick={focus}
+                                    onDblClick
+                                    onKeyDown={handleNoteFocusKeys}
+                                    onContextMenu={openNoteContext}>
                                     <label>{item}</label>
                                 </div>
                             )}
