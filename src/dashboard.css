@@ -1,0 +1,105 @@
+#dashboard {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+}
+
+#group-panel {
+    height: 100%;
+    min-width: 180px;
+    border-right: 1px solid #777;
+    display: flex;
+    flex-direction: column;
+    .groups-header {
+        display: flex;
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #777;
+        label {
+            user-select: none;
+            font-family: 'Jost';
+            font-size: 0.9rem;
+            color: #fff;
+            margin-right: auto;
+        }
+        img {
+            user-select: none;
+            pointer-events: none;
+        }
+        .add-group {
+            height: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            filter: invert(0.7);
+        }
+        .add-group:hover {
+            filter: invert(1);
+        }
+    }
+    .groups-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        box-sizing: border-box;
+        .group {
+            width: 100%;
+            padding: 3px 5px 3px 5px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: flex-end;
+            transition: background-color 0.3s ease;
+            label {
+                pointer-events: none;
+                user-select: none;
+                text-align: right;
+                font-family: 'Jost';
+                font-size: 1rem;
+                color: #fff;
+            }
+        }
+        .group:hover {
+            background-color: #77777777;
+        }
+    }
+    .notes-header {
+        display: flex;
+        width: 100%;
+        height: fit-content;
+        padding: 10px;
+        box-sizing: border-box;
+        border-bottom: 1px solid #777;
+        gap: 10px;
+        label {
+            user-select: none;
+            font-family: 'Jost';
+            font-size: 0.9rem;
+            color: #fff;
+            margin-right: auto;
+        }
+        img {
+            user-select: none;
+            pointer-events: none;
+        }
+        .exit-group,
+        .add-note {
+            height: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            filter: invert(0.7);
+        }
+        .exit-group:hover,
+        .add-note:hover {
+            filter: invert(1);
+        }
+    }
+    .notes-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+}

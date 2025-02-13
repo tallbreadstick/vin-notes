@@ -1,0 +1,124 @@
+.user-prompt {
+    position: absolute;
+    z-index: 500;
+    top: calc(50% - 60px);
+    left: calc(50% - 125px);
+    width: 250px;
+    height: 140px;
+    border: 1px solid #777;
+    display: flex;
+    flex-direction: column;
+    animation: expand 0.4s forwards;
+    .prompt-title {
+        height: 30px;
+        min-height: 30px;
+        width: 100%;
+        border-bottom: 1px solid #777;
+        display: flex;
+        label {
+            user-select: none;
+            font-family: 'Jost';
+            font-size: 0.8rem;
+            color: #fff;
+            margin: auto auto auto 8px;
+        }
+        .prompt-close {
+            height: 100%;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img {
+                user-select: none;
+                pointer-events: none;
+                filter: invert(1);
+            }
+        }
+    }
+    .prompt-body {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        box-sizing: border-box;
+        input {
+            background-color: transparent;
+            border: 1px solid #777;
+            padding: 3px 6px 3px 6px;
+            box-sizing: border-box;
+            font-family: 'Jost';
+            font-size: 0.8rem;
+            color: #fff;
+        }
+        input.invalid {
+            outline: 1px solid red;
+            border: 1px solid red;
+        }
+        button {
+            user-select: none;
+            background-color: #33333344;
+            border: 1px solid #777;
+            padding: 3px 6px 3px 6px;
+            box-sizing: border-box;
+            font-family: 'Jost';
+            font-size: 0.8rem;
+            color: #fff;
+        }
+        button:hover {
+            background-color: #33333311;
+        }
+        .selection-prompt {
+            display: flex;
+            flex-direction: column;
+        }
+        select {
+            width: 100%;
+            background-color: transparent;
+            font-family: 'Jost';
+            font-size: 0.8rem;
+            color: #fff;
+            padding: 3px;
+            box-sizing: border-box;
+            option {
+                border-radius: 0;
+                background-color: transparent;
+                border: 1px solid #777;
+                padding: 2px 3px 2px 3px;
+                box-sizing: border-box;
+                color: #000;
+            }
+        }
+    }
+}
+
+.context-menu {
+    position: absolute;
+    background-color: #111111ee;
+    border: 1px solid #777;
+    border-radius: 9px;
+    display: flex;
+    flex-direction: column;
+    padding: 4px 0 4px 0;
+    box-sizing: border-box;
+    label {
+        font-family: 'Jost';
+        font-size: 0.8rem;
+        color: #fff;
+        padding: 3px 8px 3px 8px;
+        box-sizing: border-box;
+        transition: background-color 0.2s ease;
+    }
+    label:hover {
+        background-color: #77777777;
+    }
+}
+
+@keyframes expand {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
