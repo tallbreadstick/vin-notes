@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { currentGroup, notes, setNotes } from "../notes/GroupPanel";
+import { closeNote, openNote } from "./view";
 
 export async function fetchNotes() {
     let notes;
@@ -50,6 +51,9 @@ export async function deleteNote(noteName) {
     })
     .then(ok => {
         setNotes(notes.filter(note => note !== noteName));
+        if (openNote(noteName)) {
+            closeNote(noteName);
+        }
     })
     .catch(err => {
         console.error(err);

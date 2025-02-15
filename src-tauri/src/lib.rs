@@ -1,8 +1,10 @@
 pub mod group_handler;
 pub mod note_handler;
+pub mod note_view;
 
 use group_handler::*;
 use note_handler::*;
+use note_view::*;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -21,7 +23,11 @@ pub fn run() {
             fetch_notes,
             has_note,
             create_note,
-            delete_note
+            delete_note,
+
+            // note viewer
+            open_note,
+            save_note
             
         ])
         .run(tauri::generate_context!())

@@ -134,5 +134,38 @@
 }
 
 #notes-panel {
-
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    .note-tabs {
+        width: 100%;
+        padding: 6px 6px 0 6px;
+        box-sizing: border-box;
+        min-height: 30px;
+        display: flex;
+        .note-tab {
+            border: 1px solid #777;
+            padding: 3px 8px 3px 8px;
+            box-sizing: border-box;
+            font-family: 'Jost';
+            font-size: 0.8rem;
+            color: #fff;
+        }
+        .note-tab.active {
+            background-color: #77777777;
+        }
+    }
+    .note-view {
+        flex-grow: 1;
+        overflow-x: hidden;
+        overflow-y: auto;
+        background-color: transparent;
+        font-family: 'Jost';
+        font-size: 1rem;
+        color: #fff;
+        outline: none;
+        resize: none;
+        padding: 16px 16px 0 16px;
+        box-sizing: border-box;
+    }
 }

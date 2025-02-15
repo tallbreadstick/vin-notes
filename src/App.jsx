@@ -4,6 +4,8 @@ import "./dashboard.css";
 import "./menus.css";
 import Prompt from "./menus/Prompt";
 import { onCleanup, onMount } from "solid-js";
+import NotesPanel, { activeNote } from "./notes/NotesPanel";
+import { saveNote } from "./scripts/view";
 
 function App() {
 
@@ -21,6 +23,10 @@ function App() {
                     e.preventDefaults();
                 }
                 break;
+            case 's':
+                if (e.ctrlKey) {
+                    saveNote();
+                }
             case 'delete':
                 const focused = document.activeElement;
                 if (focused.classList.contains("group")) {
@@ -37,7 +43,7 @@ function App() {
                     document.querySelector(".note").focus();
                 }
                 break;
-            case 'backspace':
+            case 'arrowleft':
                 if (e.ctrlKey) {
                     setGroup("");
                 }
@@ -58,6 +64,7 @@ function App() {
             <WindowToolbar />
             <div id="dashboard">
                 <GroupPanel />
+                <NotesPanel />
             </div>
         </main>
     );

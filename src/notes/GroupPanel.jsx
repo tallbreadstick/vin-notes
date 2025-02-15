@@ -8,7 +8,8 @@ import Prompt from "../menus/Prompt";
 import { spawnContext } from "../menus/ContextMenu";
 import Confirm from "../menus/Confirm";
 import Selection from "../menus/Selection";
-import { createNote, deleteNote, fetchNotes } from "../scripts/notes";
+import { createNote, deleteNote, fetchNotes, hasNote } from "../scripts/notes";
+import { tryOpenNote } from "./NotesPanel";
 
 export const [groups, setGroups] = createStore([]);
 export const [notes, setNotes] = createStore([]);
@@ -16,8 +17,16 @@ export const [notes, setNotes] = createStore([]);
 export const [prompting, setPrompting] = createSignal(false);
 export const [currentGroup, setGroup] = createSignal("");
 
-async function validateName(e) {
+async function validateGroupName(e) {
     if (regex.test(e.target.value) && !(await hasGroup(e.target.value))) {
+        e.target.classList.remove("invalid");
+    } else {
+        e.target.classList.add("invalid");
+    }
+}
+
+async function validateNoteName(e) {
+    if (regex.test(e.target.value) && !(await hasNote(e.target.value))) {
         e.target.classList.remove("invalid");
     } else {
         e.target.classList.add("invalid");
@@ -35,7 +44,7 @@ export function openGroupPrompt() {
                 button="Create"
                 onClick={createGroup}
                 onClose={closePrompt}
-                onInput={validateName} />
+                onInput={validateGroupName} />
         ), document.getElementById("dashboard"));
     }
 }
@@ -50,7 +59,8 @@ export function openNotePrompt() {
                 button="Create"
                 options={["Note", "Todo"]}
                 onClick={createNote}
-                onClose={closePrompt} />
+                onClose={closePrompt}
+                onInput={validateNoteName} />
         ), document.getElementById("dashboard"));
     }
 }
@@ -118,7 +128,6 @@ function GroupPanel() {
 
     function focus(e) {
         e.target.focus();
-        console.log(document.activeElement);
     }
 
     function handleGroupFocusKeys(e) {
@@ -216,7 +225,7 @@ function GroupPanel() {
                                     tabIndex="-1"
                                     data-index={index()}
                                     onClick={focus}
-                                    onDblClick
+                                    onDblClick={tryOpenNote}
                                     onKeyDown={handleNoteFocusKeys}
                                     onContextMenu={openNoteContext}>
                                     <label>{item}</label>
