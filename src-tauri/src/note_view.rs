@@ -15,6 +15,6 @@ pub fn open_note(app: AppHandle, group_name: &str, note_name: &str) -> Result<St
 #[tauri::command]
 pub fn save_note(app: AppHandle, group_name: &str, note_name: &str, contents: &str) -> Result<(), String> {
     let mut file = File::create(&format!("{}\\{}\\{}", app_dir(app), group_name, note_name)).map_err(|e| e.to_string())?;
-    file.write(contents.as_bytes()).map_err(|e| e.to_string())?;
+    file.write_all(contents.as_bytes()).map_err(|e| e.to_string())?;
     Ok(())
 }

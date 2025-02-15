@@ -41,16 +41,20 @@ export function closeNote(noteName, groupName) {
 }
 
 export async function saveNote() {
-    const noteView = noteViews[activeNote()];
-    await invoke("save_note", {
-        groupName: noteView.group,
-        noteName: noteView.title,
-        contents: noteView.content
-    })
-    .then(ok => {
+    if (activeNote() !== -1) {
+        const view = document.querySelector(".note-view");
+        const noteView = noteViews[activeNote()];
+        setNoteViews(activeNote(), "content", view.value);
+        await invoke("save_note", {
+            groupName: noteView.group,
+            noteName: noteView.title,
+            contents: noteView.content
+        })
+        .then(ok => {
 
-    })
-    .catch(err => {
-        console.error(err);
-    })
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    }
 }

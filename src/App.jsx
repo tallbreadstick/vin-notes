@@ -10,6 +10,7 @@ import { saveNote } from "./scripts/view";
 function App() {
 
     function handleKeyEvents(e) {
+        // todo: disable if text area is focused
         switch (e.key.toLowerCase()) {
             case 'g':
                 if (e.ctrlKey) {
@@ -44,6 +45,7 @@ function App() {
                 }
                 break;
             case 'arrowleft':
+            case 'backspace':
                 if (e.ctrlKey) {
                     setGroup("");
                 }
