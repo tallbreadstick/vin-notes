@@ -172,6 +172,7 @@ function GroupPanel() {
                 break;
             case 'Enter':
                 // todo!
+                tryOpenNote(e);
                 break;
         }
     }

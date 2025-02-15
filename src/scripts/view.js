@@ -10,8 +10,12 @@ export async function openNote(noteName) {
     .then(ok => {
         if (!noteOpen(noteName, currentGroup())) {
             setNoteViews([...noteViews, { title: noteName, group: currentGroup(), saved: true, content: ok }]);
+            viewNote(noteViews.length - 1);
+        } else {
+            viewNote(noteViews.findIndex(note => note.title === noteName && note.group === currentGroup()));
         }
-        viewNote(noteViews.length - 1);
+        const view = document.querySelector(".note-view");
+        view.focus();
     })
     .catch(err => {
         console.error(err);
@@ -37,7 +41,10 @@ export function viewNote(index) {
 }
 
 export function closeNote(noteName, groupName) {
-    setNoteViews(noteViews.filter(note => note.title !== noteName && note.group !== groupName));
+    setNoteViews(noteViews.filter(note => !(note.title === noteName && note.group === groupName)));
+    if (noteViews.length === 0) {
+        setActiveNote(-1);
+    }
 }
 
 export async function saveNote() {

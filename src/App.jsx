@@ -11,6 +11,10 @@ function App() {
 
     function handleKeyEvents(e) {
         // todo: disable if text area is focused
+        const view = document.querySelector(".note-view");
+        if (document.activeElement === view) {
+            return;
+        }
         switch (e.key.toLowerCase()) {
             case 'g':
                 if (e.ctrlKey) {

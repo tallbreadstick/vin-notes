@@ -144,12 +144,27 @@
         min-height: 30px;
         display: flex;
         .note-tab {
+            display: flex;
+            gap: 10px;
             border: 1px solid #777;
             padding: 3px 8px 3px 8px;
             box-sizing: border-box;
             font-family: 'Jost';
             font-size: 0.8rem;
             color: #fff;
+            label {
+                user-select: none;
+                pointer-events: none;
+            }
+            .note-tab-close {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                filter: invert(0.7);
+            }
+            .note-tab-close:hover {
+                filter: invert(1);
+            }
         }
         .note-tab.active {
             background-color: #77777777;
