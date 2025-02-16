@@ -27,24 +27,28 @@ export function noteOpen(noteName, groupName) {
 }
 
 export function viewNote(index) {
-    setActiveNote(index);
-    const view = document.querySelector(".note-view");
-    view.value = noteViews[index].content;
-    const views = [...document.querySelectorAll(".note-tab")];
-    views.forEach((item, i) => {
-        if (index === i) {
-            item.classList.add("active");
-        } else {
-            item.classList.remove("active");
-        }
-    });
+    if (index >= 0 && index < noteViews.length) {
+        setActiveNote(index);
+        const view = document.querySelector(".note-view");
+        view.value = noteViews[index].content;
+        const views = [...document.querySelectorAll(".note-tab")];
+        views.forEach((item, i) => {
+            if (index === i) {
+                item.classList.add("active");
+            } else {
+                item.classList.remove("active");
+            }
+        });
+    }
 }
 
 export function closeNote(noteName, groupName) {
     setNoteViews(noteViews.filter(note => !(note.title === noteName && note.group === groupName)));
-    if (noteViews.length === 0) {
-        setActiveNote(-1);
-    }
+    setTimeout(() => {
+        if (noteViews.length === 0) {
+            setActiveNote(-1);
+        }
+    }, 0);
 }
 
 export async function saveNote() {
@@ -58,7 +62,8 @@ export async function saveNote() {
             contents: noteView.content
         })
         .then(ok => {
-
+            // toast: note saved succesfully!
+            console.log("note saved!");
         })
         .catch(err => {
             console.error(err);

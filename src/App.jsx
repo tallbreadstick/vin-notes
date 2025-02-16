@@ -10,9 +10,11 @@ import { saveNote } from "./scripts/view";
 function App() {
 
     function handleKeyEvents(e) {
-        // todo: disable if text area is focused
         const view = document.querySelector(".note-view");
         if (document.activeElement === view) {
+            if (e.ctrlKey && e.key.toLowerCase() === 's') {
+                saveNote();
+            }
             return;
         }
         switch (e.key.toLowerCase()) {
